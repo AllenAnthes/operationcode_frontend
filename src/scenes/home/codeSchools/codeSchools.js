@@ -21,19 +21,33 @@ class CodeSchools extends Component {
   }
 
   componentDidMount() {
+    const preventDuplicateStateCodeSchools = (response) => {
+      const schools = response.data.reduce((acc, school) => {
+        const map = new Map();
+        school.locations.forEach((location) => {
+          const cityState = `${location.city}${location.state}`;
+          if (map.has(cityState)) {
+            const prev = acc[map.get(cityState)];
+            const newAddress = location.address1;
+            prev.multiple = prev.multiple
+              ? prev.multiple.concat([newAddress])
+              : [prev.address1, newAddress];
+          } else {
+            map.set(cityState, acc.length);
+            acc.push(Object.assign({}, _.omit(school, ['locations']), location));
+          }
+        });
+        return acc;
+      }, []);
+      this.setState({ schools });
+    };
+
     axios
       .get('https://api.operationcode.org/api/v1/code_schools.json')
-      .then((response) => {
-        const schools = response.data.reduce((acc, school) => {
-          school.locations.forEach((location) => {
-            acc.push(Object.assign({}, _.omit(school, ['locations']), location));
-          });
-          return acc;
-        }, []);
-        this.setState({ schools });
-      })
+      .then(response => preventDuplicateStateCodeSchools(response))
       .catch(() => this.setState({ errorResponse: true }));
   }
+
 
   render() {
     return (

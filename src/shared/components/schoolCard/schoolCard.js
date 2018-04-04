@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import OutboundLink from 'shared/components/outboundLink/outboundLink';
 import styles from './schoolCard.css';
@@ -14,6 +14,7 @@ const SchoolCard = ({
   schoolCity,
   schoolName,
   schoolState,
+  multiple,
 }) => (
   <OutboundLink
     href={link}
@@ -39,16 +40,22 @@ const SchoolCard = ({
             {schoolCity ? ', ' : null}
             {schoolState}
             {schoolState ? <br /> : null}
+            {multiple && <Fragment>Multiple Campuses<br /></Fragment>}
+
+
             <br />
+
           </span>
         </p>
 
         <p className={styles.schoolInfo}>
+
           GI Bill Accepted: <b>{GI}</b>
           <br />
           Commitment: <b>{fullTime}</b>
           <br />
           Hardware Included: <b>{hardware}</b>
+
         </p>
       </div>
     </div>
@@ -66,11 +73,13 @@ SchoolCard.propTypes = {
   GI: PropTypes.string.isRequired,
   fullTime: PropTypes.string.isRequired,
   hardware: PropTypes.string.isRequired,
+  multiple: PropTypes.arrayOf(PropTypes.string)
 };
 
 SchoolCard.defaultProps = {
   schoolCity: null,
   schoolState: null,
+  multiple: null,
 };
 
 export default SchoolCard;

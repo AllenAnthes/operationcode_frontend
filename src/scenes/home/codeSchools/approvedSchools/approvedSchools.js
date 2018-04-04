@@ -19,6 +19,7 @@ class ApprovedSchools extends Component {
         GI={school.va_accepted ? 'Yes' : 'No'}
         fullTime={school.full_time ? 'Full-Time' : 'Flexible'}
         hardware={school.hardware_included ? 'Yes' : 'No'}
+        multiple={school.multiple}
       />
     ));
 
@@ -51,6 +52,8 @@ ApprovedSchools.propTypes = {
     online_only: PropTypes.bool,
     updated_at: PropTypes.string,
     url: PropTypes.string,
+    address: PropTypes.string,
+    multiple: PropTypes.arrayOf(PropTypes.string)
   })).isRequired,
 };
 
